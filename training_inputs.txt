@@ -1,0 +1,2 @@
+data/image_1_ch0.nii.gz
+data/image_2_ch0.nii.gz

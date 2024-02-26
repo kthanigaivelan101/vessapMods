@@ -1,0 +1,2 @@
+data/label_1.nii.gz
+data/label_2.nii.gz
