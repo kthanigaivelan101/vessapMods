@@ -1,11 +1,12 @@
 from __future__ import print_function
 from dvn.utils import get_itk_array,write_itk_imageArray
-import numpy as np
 from dvn import FCN, VNET, UNET
 from dvn import Network as NET
 from dvn import losses as ls
+import numpy as np
 import argparse
 import os
+
 import keras as K
 
 # Defined global variables here .................................
@@ -76,6 +77,7 @@ def generate_data(inputFn,labelFn,maskFn,preprocess=False,hist_cutoff=[],n_in=1,
     mFn = []
     with open(os.path.abspath(inputFn)) as f:
         iFn = f.readlines()
+    print(iFn)
     iFn = [x.strip() for x in iFn]
 
     with open(os.path.abspath(labelFn)) as f:
@@ -162,7 +164,7 @@ def get_bounding_blocks(feats,grd_truth,mask=None,gmt=False,cube_size=64):
         values = []
         indices = []
 
-    for x in np.arange(0,grd_truth.shape[1]-BLOCK_SIZE[0],BLOCK_SIZE[0]-OVERLAP_SIZE[0]):
+    for x in np.arange(0,grd_truth.shape[1]-BLOCK_SIZE[0]+1,BLOCK_SIZE[0]-OVERLAP_SIZE[0]): #current imp: this loop is never entered bc gt shape[1] is same as blocksize[0]
         for y in np.arange(0,grd_truth.shape[2]-BLOCK_SIZE[1],BLOCK_SIZE[1]-OVERLAP_SIZE[1]):
             for z in np.arange(0,grd_truth.shape[3]-BLOCK_SIZE[2],BLOCK_SIZE[2]-OVERLAP_SIZE[2]):
                 data = grd_truth[vol_ind][x:x+BLOCK_SIZE[0],y:y+BLOCK_SIZE[1],z:z+BLOCK_SIZE[2]]
@@ -309,6 +311,7 @@ def run():
     print('...................................................\n \n')
 
     for i, this_epochs in enumerate(iters):
+        data_y = data_y.astype('float32')
         model, lr = train_model(model=model,data_x=data_x,data_y=data_y,data_mask=data_mask,batch_size=batch_size,n_epochs=this_epochs,lr=lr,weighted_cost=weighted_cost)
         this_model_fn = os.path.abspath(os.path.join(model_folder,'model'+str(i+1)+'.dat'))
         print('saving model......')

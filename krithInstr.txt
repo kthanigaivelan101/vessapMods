@@ -1,0 +1,4 @@
+To run:
+python3 train.py --inputFns=training_inputs.txt --labelFns=training_labels.txt --save-after=10 --modelFolder=/results --weighted-cost --cs=50 --n_in=1 --epoch=10 --lr=0.01 --batch-size=10
+To debug:
+python3 -m pdb train.py --inputFns=training_inputs.txt --labelFns=training_labels.txt --save-after=10 --modelFolder=/results --weighted-cost --cs=50 --n_in=1 --epoch=10 --lr=0.01 --batch-size=10
